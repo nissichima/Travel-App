@@ -1,0 +1,180 @@
+button{
+    width: 100px;
+    height: 50px;
+    background: #612073;
+    color: #ffe940;
+    font-size: 26px;
+    font-family: 'Oswald', sans-serif;
+    border: none;
+    box-shadow: 2px 4px 5px #444;
+}
+.btn btn-primary float-right{
+   background: #ffe940; 
+}
+
+h1{
+    font-size: 36px;
+    font-color: black;
+}
+
+/* Reset style for HTML element on active to have no border*/
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+body{
+    background-image: url("weather.jpg");
+    /* Center and scale the image */
+    background-position: center;
+    background-color: : #000000;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: scroll;
+    z-index: 1;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+#app{
+    display: grid;
+    grid-auto-rows: minmax(150px, auto);
+    /* grid-template-columns:  */
+    height:100vh;
+    background: #000000;
+    color: #ffffff;
+    justify-content: center;
+    grid-gap: 1em;
+    font-size: 20px;
+    font-family: 'Oswald', sans-serif;
+}
+
+.holder{
+    /*border: green solid 2px;*/
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+}
+
+label{
+    display:block;
+    font-size: 27px;
+}
+
+/* for heading part */
+.display-4{
+    color: white;
+    font-size: 65px;
+
+}
+
+/* for zip code enter part */
+#zip{
+    border: lightslategray solid 1px;
+    border-radius: 0.5em;
+    padding: 15px;
+}
+
+input{
+    display:block;
+    height: 60px;
+    width: 320px;
+    background:#22b2da;
+    color: #000000;
+    font-size: 20px;
+    font-family: 'Oswald', sans-serif;
+    border: none;
+}
+
+/* for feeling enter part */
+.feel_box{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+}
+#feelings{
+    width: auto;
+    padding: 15px;
+}
+textarea{
+    background:#b37109;
+    font-size: 20px;
+    font-family: 'Oswald', sans-serif;
+}
+
+#generate{
+    width: fit-content;
+    background-color: #1f2763;
+
+}
+
+/* for most recent entry part */
+.entry{
+    background: rgba(59, 74, 107, .4);
+    border: lightslategray solid 1px;
+    border-radius: 0.5em;
+    padding: 15px;
+}
+.title{
+    border-bottom: dodgerblue solid 2px;
+}
+#entryHolder{
+    padding-top: 10px;
+    min-height: 15vh;
+    display: grid;
+    grid-template-areas:
+            'date temp temp temp'
+            'cont cont cont cont ';
+}
+#date{
+    grid-area: date;
+}
+#temp{
+    grid-area: temp;
+}
+#content{
+    grid-area: cont;
+}
+
+#zip{
+    background: #541163;
+}
+
+
+/* Style for Placeholder Text*/
+::placeholder { /* Firefox, Chrome, Opera */ 
+    color: #000000; 
+    font-family: 'Oswald', sans-serif;
+
+} 
+  
+:-ms-input-placeholder { /* Internet Explorer 10-11 */ 
+    color: #000000; 
+    font-family: 'Oswald', sans-serif;
+
+} 
+  
+::-ms-input-placeholder { /* Microsoft Edge */ 
+    color: #000000; 
+    font-family: 'Oswald', sans-serif;
+
+} 
+
+/* for median or large devices*/
+@media (min-width: 800px) {
+    #app{
+        display: flex;
+        flex-flow: column wrap;
+        /* different than small devices */
+        margin-left: 10em;
+        margin-right: 10em;
+        padding: 2em;
+        /* end different */
+        background-color: #1c1c1b;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+        font-size: 20px;
+        font-family: 'Oswald', sans-serif;
+    }
+}
