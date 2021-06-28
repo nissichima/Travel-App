@@ -15,26 +15,19 @@
       <h1 class="display-4">Travel Weather App</h1>
   </div>
   <div class ="holder zip">
-    <label for="zip">Enter Zipcode</label>
-    <input type="text" id="zip" placeholder="Enter zip code here">
+    <label for="zip">Destination</label>
+    <input type="text" id="zip" placeholder="Enter City of Destination">
   </div>
   <div class ="holder feel">
       <div class="feel_box">
-          <label for="feelings">How are you feeling today?</label>
+          <label for="feelings">Arrival Date</label>
       </div>
       <div class="feel_box">
-          <textarea class= "myInput" id="feelings" placeholder="Enter your feelings here" rows="5"></textarea>
+          <input type="date" name="date" id="date" class="date" min="0" required>
       </div>
       <div class="feel_box">
-          <button class="btn btn-primary float-right" id="generate" type = "submit" > Generate </button>
+          <button class="btn btn-primary float-right" id="generate" type = "submit" > Get Forecast! </button>
       </div>
-  </div>
-  <div class ="holder entry">
-    <div class = "title">Most Recent Entry</div>
-   <div id = "entryHolder">
-    <div id = "date"></div> 
-   <div id = "temp"></div>
-   <div id = "content"></div>
   </div>
   </div>
   </div>
