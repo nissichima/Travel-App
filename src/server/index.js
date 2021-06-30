@@ -1,3 +1,11 @@
+import './styles/style.scss'
+import './styles/utilities.scss'
+
+import { makePost, updateUI } from './js/app'
+import { handleSubmit } from './js/formHandler'
+import { btnResetEl, btnSubEl } from './js/domEl'
+
+
 var path = require('path')
 const express = require('express')
 const mockAPIResponse = require('./mockAPI.js')
@@ -21,3 +29,9 @@ app.listen(8080, function () {
 app.get('/test', function (req, res) {
     res.send(mockAPIResponse)
 })
+
+
+export {
+    makePost,
+    updateUI
+}
