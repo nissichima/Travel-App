@@ -1,60 +1,132 @@
-// Setup empty JS object to act as endpoint for all routes
-projectData = {};
-
-// Require Express to run server and routes
-const express = require('express');
-// Start up an instance of app
-const app = express();
-/* Middleware*/
-// Include packages in server.js
-const bodyParser = require('body-parser');
+const express = require('express')
+const cors = require('cors')
+const bodyParser = require('body-parser')
+const fetch = require('node-fetch')
+const { response } = require('express')
+const dotenv = require('dotenv').config()
+const { dateHandler } = require('./dateHandler')
+const app = express()
+app.use(cors())
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 
 app.use(express.static('dist'))
 
-//Here we are configuring express to use body-parser as middle-ware.
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-// Cors for cross origin allowance
-const cors = require('cors');
-app.use(cors());
-// Initialize the main project folder
-//app.use(express.static('website'));
-
-
-// Setup Server that will allow app to run locally in browser
-const port = 7778;
-const server = app.listen(port, listening);
-//debug function
-function listening(){
-     console.log("server running"); 
-     console.log(`running on localhost: {$port}`);
-}
-
-//GET route that returns the projectData object
-
-
-app.get('/all', function (req, res) {
-  res.send(projectData);
+app.get('/', (req,res) => { 
+    res.sendFile('dist/index.html')
+    // res.send('dist/index.html')
 })
 
-//POST route adds temperature, date, user response incoming data to projectData
+const PORT = process.env.PORT || 8080;
 
-app.post('/addData', addData);
-function addData(request, response) {
-    const newWeatherJournal = {
-        temperature: request.body.temperature,
-        date: request.body.date,
-        userResponse: request.body.userResponse
-    };
-    projectData=newWeatherJournal;
+const server = app.listen(PORT, () => console.log(`app listening on port ${PORT}`));
+// app.listen(PORT, () => console.log(`app listening on port ${PORT}`));
+
+// base url of all api's
+const Geo_baseURL = 'http://api.geonames.org/searchJSON'
+const WB_baseURL = 'https://api.weatherbit.io/v2.0/current'
+const restCount_baseURL = 'https://restcountries.eu/rest/v2/alpha/'
+const WB_baseURL16 = 'https://api.weatherbit.io/v2.0/forecast/daily'
+const PB_baseURL = 'https://pixabay.com/api/'
+
+// makes all API requests
+app.post('/getCityInfo', async (req,res) => {
+
+    const {city, date} = req.body
+
+    // getting date info
+    const {daysAway, today} = dateHandler(date)
+    
+    // console.log(`Today = ${today}`)
+    // console.log(`daysAway = ${daysAway}`)
+
+    // use city to fetch GeoName info
+    const response = await fetch(`${Geo_baseURL}?q=${city}&maxRows=1&username=${process.env.GeoN_KEY}`)
+    const response1 = await response.json()
+    
+    // console.log(response1)
+
+    if(response1.totalResultsCount == 0) {
+        const name = 'invalid'
+        res.send({name})
+        return
+    }
+    
+    const {lat, lng, name, countryName, countryCode} = response1.geonames[0]
+    
+    // console.log(name)
+    // console.log(countryName)
+
+    // get weather data for appropriate date
+    if(daysAway < 7) {
+        var WBresp1 = await fetch(`${WB_baseURL}?&lat=${lat}&lon=${lng}&key=${process.env.WB_KEY}`)
+        const WBresp2 = await WBresp1.json()
+        // console.log(WBresp2)
+        const {data} = WBresp2
+        var {weather, rh, pres, temp, precip} = data[0]
+        var {description} = weather
+        var forecastDate = today
+
+    }else if(daysAway < 16) {
+        var WBresp1 = await fetch(`${WB_baseURL16}?&lat=${lat}&lon=${lng}&key=${process.env.WB_KEY}`)
+        const WBresp2 = await WBresp1.json()
+        // console.log(WBresp2)
+        const {data} = WBresp2
+        var {weather, rh, pres, temp, precip, valid_date} = data[daysAway]
+        var {description} = weather
+        var forecastDate = valid_date
+        // var forecastDate = date
+
+    } else {
+        var description = '<i class="fas fa-exclamation"></i>Date too far into the future, unable to predict weather forecast'
+        var rh = 'N/A'
+        var pres = 'N/A'
+        var temp = 'N/A'
+        var precip = 'N/A'
+        var forecastDate = date
+    }
+
+    // console.log(`descriptiopn: ${description} /// precip: ${precip} /// rh: ${rh} /// pres: ${pres} /// temp: ${temp} /// forecastDate: ${forecastDate}`)
+    
+    // fetch PixaBay image of city and if hits = 0, then fetch country image
+    const resp8 = await fetch(`${PB_baseURL}?key=${process.env.PB_KEY}&q=${name}`)
+    const resp9 = await resp8.json()
+    // console.log(resp9)
+    if(resp9.total != 0){
+        var {webformatURL} = resp9.hits[0]    
+        console.log("city found showing city")
+    }else {
+        const resp10 = await fetch(`${PB_baseURL}?key=${process.env.PB_KEY}&q=${countryName}`)
+        const resp11 = await resp10.json()
+        // console.log(resp11)
+        var {webformatURL} = resp11.hits[0]    
+        console.log("city not found showing country")
+    }
+
+    // use countryCode to fetch info about Country from restCountries API 
+    const RCresp = await fetch(`${restCount_baseURL}${countryCode}`)
+    const RCresp1 = await RCresp.json()
+
+    // console.log(RCresp1)
+
+    const capital = RCresp1.capital
+    const currencies = RCresp1.currencies[0].name
+    const currSymb = RCresp1.currencies[0].symbol
+    const languages = RCresp1.languages[0].name
+    const population = RCresp1.population
+    const flag = RCresp1.flag
+
+    // console.log(capital, currencies, currSymb, languages, population, flag)
+
+    let backData = {rh, pres, temp, name, date, precip, description, webformatURL, forecastDate, countryName, 
+        capital, currencies, currSymb, languages, population, flag}
+    // console.log(webformatURL)
+    res.send({rh, pres, temp, name, precip, description, webformatURL, forecastDate, countryName,
+        capital, currencies, currSymb, languages, population, flag})
+
+})
+
+
+module.exports = {
+    app
 }
-
-
- /* solution: The problem is that these properties are not defined in Express module
- *           - they are added dynamically in runtime.
- *           Install express typings (@types/express)
- *           hit Alt+Enter on "express" in require('express'),
- *           choose Install Typescript definitions for better type information.!
- */
-
