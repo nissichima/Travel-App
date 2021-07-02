@@ -1,5 +1,4 @@
-import './styles/style.scss'
-import './styles/utilities.scss'
+import 'styles/style.scss'
 
 import { makePost, updateUI } from './js/app'
 import { handleSubmit } from './js/formHandler'
