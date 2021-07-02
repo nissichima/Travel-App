@@ -22,26 +22,26 @@ const PORT = process.env.PORT || 8080;
 const server = app.listen(PORT, () => console.log(`app listening on port ${PORT}`));
 // app.listen(PORT, () => console.log(`app listening on port ${PORT}`));
 
-// base url of all api's
-const Geo_baseURL = 'http://api.geonames.org/searchJSON'
-const WB_baseURL = 'https://api.weatherbit.io/v2.0/current'
-const restCount_baseURL = 'https://restcountries.eu/rest/v2/alpha/'
-const WB_baseURL16 = 'https://api.weatherbit.io/v2.0/forecast/daily'
-const PB_baseURL = 'https://pixabay.com/api/'
+//api
+const Geo_base = 'http://api.geonames.org/searchJSON'
+const WB_base = 'https://api.weatherbit.io/v2.0/current'
+const restCount_base = 'https://restcountries.eu/rest/v2/alpha/'
+const WB_base16 = 'https://api.weatherbit.io/v2.0/forecast/daily'
+const PB_base = 'https://pixabay.com/api/'
 
 // makes all API requests
 app.post('/getCityInfo', async (req,res) => {
 
     const {city, date} = req.body
 
-    // getting date info
+    // date info
     const {daysAway, today} = dateHandler(date)
     
     // console.log(`Today = ${today}`)
     // console.log(`daysAway = ${daysAway}`)
 
     // use city to fetch GeoName info
-    const response = await fetch(`${Geo_baseURL}?q=${city}&maxRows=1&username=${process.env.GeoN_KEY}`)
+    const response = await fetch(`${Geo_base}?q=${city}&maxRows=1&username=${process.env.GeoN_KEY}`)
     const response1 = await response.json()
     
     // console.log(response1)
@@ -59,7 +59,7 @@ app.post('/getCityInfo', async (req,res) => {
 
     // get weather data for appropriate date
     if(daysAway < 7) {
-        var WBresp1 = await fetch(`${WB_baseURL}?&lat=${lat}&lon=${lng}&key=${process.env.WB_KEY}`)
+        var WBresp1 = await fetch(`${WB_base}?&lat=${lat}&lon=${lng}&key=${process.env.WB_KEY}`)
         const WBresp2 = await WBresp1.json()
         // console.log(WBresp2)
         const {data} = WBresp2
@@ -68,7 +68,7 @@ app.post('/getCityInfo', async (req,res) => {
         var forecastDate = today
 
     }else if(daysAway < 16) {
-        var WBresp1 = await fetch(`${WB_baseURL16}?&lat=${lat}&lon=${lng}&key=${process.env.WB_KEY}`)
+        var WBresp1 = await fetch(`${WB_base16}?&lat=${lat}&lon=${lng}&key=${process.env.WB_KEY}`)
         const WBresp2 = await WBresp1.json()
         // console.log(WBresp2)
         const {data} = WBresp2
@@ -89,14 +89,14 @@ app.post('/getCityInfo', async (req,res) => {
     // console.log(`descriptiopn: ${description} /// precip: ${precip} /// rh: ${rh} /// pres: ${pres} /// temp: ${temp} /// forecastDate: ${forecastDate}`)
     
     // fetch PixaBay image of city and if hits = 0, then fetch country image
-    const resp8 = await fetch(`${PB_baseURL}?key=${process.env.PB_KEY}&q=${name}`)
+    const resp8 = await fetch(`${PB_base}?key=${process.env.PB_KEY}&q=${name}`)
     const resp9 = await resp8.json()
     // console.log(resp9)
     if(resp9.total != 0){
         var {webformatURL} = resp9.hits[0]    
         console.log("city found showing city")
     }else {
-        const resp10 = await fetch(`${PB_baseURL}?key=${process.env.PB_KEY}&q=${countryName}`)
+        const resp10 = await fetch(`${PB_base}?key=${process.env.PB_KEY}&q=${countryName}`)
         const resp11 = await resp10.json()
         // console.log(resp11)
         var {webformatURL} = resp11.hits[0]    
@@ -104,7 +104,7 @@ app.post('/getCityInfo', async (req,res) => {
     }
 
     // use countryCode to fetch info about Country from restCountries API 
-    const RCresp = await fetch(`${restCount_baseURL}${countryCode}`)
+    const RCresp = await fetch(`${restCount_base}${countryCode}`)
     const RCresp1 = await RCresp.json()
 
     // console.log(RCresp1)
