@@ -1,8 +1,8 @@
-import 'styles/style.scss'
+/*import './styles/style.scss'
 
 import { makePost, updateUI } from './js/app'
 import { handleSubmit } from './js/formHandler'
-import { btnResetEl, btnSubEl } from './js/domEl'
+import { btnResetEl, btnSubEl } from './js/domEl'*/
 
 
 var path = require('path')
@@ -30,7 +30,7 @@ app.get('/test', function (req, res) {
 })
 
 
-export {
+/*export {
     makePost,
     updateUI
-}
+}*/
