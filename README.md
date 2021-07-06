@@ -49,4 +49,4 @@
 - go to [http://localhost:8081/](http://localhost:8081/)
 
 ## Screenshot of App
-<img src = '.../src/client/images/travel.png'/>
+<img src = '../src/client/images/travel.png'/>
