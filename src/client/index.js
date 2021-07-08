@@ -1,9 +1,9 @@
 //change code
 import './styles/style.scss'
 
-import { makePost, updateUI } from './js/app'
+/*import { makePost, updateUI } from './js/app'
 import { btnResetEl, btnSubEl } from './js/domEl'
-
+*/
 let today = new Date();
 let dd = today.getDate();
 let mm = today.getMonth()+1; //January is 0!
@@ -50,8 +50,8 @@ window.onload = () => {
 //         })
 //     })
 // }  
-
+/*
 export {
     makePost,
     updateUI
-}
+}*/

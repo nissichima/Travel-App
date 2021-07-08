@@ -1,24 +1,28 @@
 {
   "name": "travelApp",
-  "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server/index.js",
-    "build-prod": "webpack --config webpack.prod.cjs",
-    "build-dev": "webpack serve  --config webpack.dev.js"
+    "test": "jest",
+    "start": "node src/server/index.mjs",
+    "build-prod": "webpack --config webpack.prod.js",
+    "build-dev": "webpack-dev-server  --config webpack.dev.js --open"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "dotenv": "^8.2.0",
+    "@babel/runtime": "^7.14.0",
+    "dotenv": "^8.6.0",
     "dotenv-webpack": "^7.0.2",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "handlebars": "^4.7.7",
+    "handlebars-loader": "^1.7.1",
+    "html-webpack-plugin": "^5.3.2",
     "jest-fetch-mock": "^3.0.3",
-    "webpack": "^4.35.3"
+    "webpack-cli": "^3.3.12"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
