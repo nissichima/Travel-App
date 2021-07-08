@@ -1,3 +1,5 @@
+//change code
+
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
@@ -17,7 +19,7 @@ app.get('/', (req,res) => {
     // res.send('dist/index.html')
 })
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
 const server = app.listen(PORT, () => console.log(`app listening on port ${PORT}`));
 // app.listen(PORT, () => console.log(`app listening on port ${PORT}`));
@@ -127,6 +129,4 @@ app.post('/getCityInfo', async (req,res) => {
 })
 
 
-module.exports = {
-    app
-}
+export { app };
