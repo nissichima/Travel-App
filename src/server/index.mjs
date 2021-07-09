@@ -1,17 +1,14 @@
-const express = require('express');
+/*const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const async = require('express-async-errors')
 const fetch = require('node-fetch')
 
-/* Server Setup */
 const app = express();
 app.use(cors());
 
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// parse application/json
 app.use(bodyParser.json());
 
 app.use(express.static('./dist'));
@@ -21,11 +18,8 @@ app.listen(PORT, () => {
   console.log(`CORS-enabled web server listening on port ${PORT}`);
 });
 
-/* Trips Array */
 
 const trips = [];
-
-/* Routes */
 
 app.get('/', (req, res) => {
   res.status(200).send('./dist/index.html');
@@ -58,11 +52,7 @@ app.post('/forecast', async (req, res, next) => {
   }
 });
 
-export { app };
-
-
-
-/*
+export { app };*/
 
 import path from 'path';
 import express from 'express';
@@ -71,7 +61,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
-
+/*
 var path = require('path');
 const express = require('express');
 const mockAPIResponse = require('./mockAPI.js');
@@ -79,7 +69,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const fetch = require('node-fetch');
-
+*/
 dotenv.config();
 const api_key = process.env.API_KEY;
 
@@ -114,4 +104,4 @@ app.post('/userText', async(req, res) => {
       }catch (error) {
       console.log("error", error);
       }
-});*/
+});
