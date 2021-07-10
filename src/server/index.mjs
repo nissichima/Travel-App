@@ -1,3 +1,4 @@
+
 import path from 'path';
 import express from 'express';
 import mockAPIResponse from './mockAPI.js';
@@ -5,15 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
-/*
-var path = require('path');
-const express = require('express');
-const mockAPIResponse = require('./mockAPI.js');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const fetch = require('node-fetch');
-*/
+
 dotenv.config();
 const api_key = process.env.API_KEY;
 
@@ -30,22 +23,126 @@ const server = app.listen(port, () => {
     console.log(`running on localhost: ${port}`);
 });
 
+
+//API VARIABLES
+const GeoN_baseURL = 'http://api.geonames.org/searchJSON'
+const restCount_baseURL = 'https://restcountries.eu/rest/v2/alpha/'
+const WB_baseURL16 = 'https://api.weatherbit.io/v2.0/forecast/daily'
+const WB_baseURL = 'https://api.weatherbit.io/v2.0/current'
+const PB_baseURL = 'https://pixabay.com/api/'
+
 app.get('/', function (req, res) {
     res.sendFile(path.resolve('dist/index.html'))
 });
-
+/*
 app.get('/test', function (req, res) {
     res.send(mockAPIResponse)
-});
+});*/
 
-app.post('/userText', async(req, res) => {
-    console.log('req.body ===+>', req.body)
-    const response = await fetch(`https://api.meaningcloud.com/sentiment-2.1?key=${api_key}&url=${req.body.formText}&lang=en`);
-    try {
-        const data = await response.json();
-        console.log(data);
-        res.send(data);
-      }catch (error) {
-      console.log("error", error);
-      }
-});
+// makes all API requests
+app.post('/getCityInfo', async (req,res) => {
+
+    const {city, date} = req.body
+
+    // getting date info
+    const {daysAway, today} = dateHandler(date)
+    
+    // console.log(`Today = ${today}`)
+    // console.log(`daysAway = ${daysAway}`)
+
+    // use city to fetch GeoName info
+    const response = await fetch(`${GeoN_baseURL}?q=${city}&maxRows=1&username=${process.env.GeoN_KEY}`)
+    const response1 = await response.json()
+    
+    // console.log(response1)
+
+    if(response1.totalResultsCount == 0) {
+        const name = 'invalid'
+        res.send({name})
+        return
+    }
+    
+    const {lat, lng, name, countryName, countryCode} = response1.geonames[0]
+    
+    // console.log(name)
+    // console.log(countryName)
+
+    // get weather data for appropriate date
+    if(daysAway < 7) {
+        var WBresp1 = await fetch(`${WB_baseURL}?&lat=${lat}&lon=${lng}&key=${process.env.WB_KEY}`)
+        const WBresp2 = await WBresp1.json()
+        // console.log(WBresp2)
+        const {data} = WBresp2
+        var {weather, rh, pres, temp, precip} = data[0]
+        var {description} = weather
+        var forecastDate = today
+
+    }else if(daysAway < 16) {
+        var WBresp1 = await fetch(`${WB_baseURL16}?&lat=${lat}&lon=${lng}&key=${process.env.WB_KEY}`)
+        const WBresp2 = await WBresp1.json()
+        // console.log(WBresp2)
+        const {data} = WBresp2
+        var {weather, rh, pres, temp, precip, valid_date} = data[daysAway]
+        var {description} = weather
+        var forecastDate = valid_date
+        // var forecastDate = date
+
+    } else {
+        var description = '<i class="fas fa-exclamation"></i>Date too far into the future, unable to predict weather forecast'
+        var rh = 'N/A'
+        var pres = 'N/A'
+        var temp = 'N/A'
+        var precip = 'N/A'
+        var forecastDate = date
+    }
+
+    // console.log(`descriptiopn: ${description} /// precip: ${precip} /// rh: ${rh} /// pres: ${pres} /// temp: ${temp} /// forecastDate: ${forecastDate}`)
+    
+    // fetch PixaBay image of city and if hits = 0, then fetch country image
+    const resp8 = await fetch(`${PB_baseURL}?key=${process.env.PB_KEY}&q=${name}`)
+    const resp9 = await resp8.json()
+    // console.log(resp9)
+    if(resp9.total != 0){
+        var {webformatURL} = resp9.hits[0]    
+        console.log("city found showing city")
+    }else {
+        const resp10 = await fetch(`${PB_baseURL}?key=${process.env.PB_KEY}&q=${countryName}`)
+        const resp11 = await resp10.json()
+        // console.log(resp11)
+        var {webformatURL} = resp11.hits[0]    
+        console.log("city not found showing country")
+    }
+
+    // use countryCode to fetch info about Country from restCountries API 
+    const RCresp = await fetch(`${restCount_baseURL}${countryCode}`)
+    const RCresp1 = await RCresp.json()
+
+    // console.log(RCresp1)
+
+    const capital = RCresp1.capital
+    const currencies = RCresp1.currencies[0].name
+    const currSymb = RCresp1.currencies[0].symbol
+    const languages = RCresp1.languages[0].name
+    const population = RCresp1.population
+    const flag = RCresp1.flag
+
+    // console.log(capital, currencies, currSymb, languages, population, flag)
+
+    let backData = {rh, pres, temp, name, date, precip, description, webformatURL, forecastDate, countryName, 
+        capital, currencies, currSymb, languages, population, flag}
+    // console.log(webformatURL)
+    res.send({rh, pres, temp, name, precip, description, webformatURL, forecastDate, countryName,
+        capital, currencies, currSymb, languages, population, flag})
+
+})
+
+
+export{
+    app
+}
+
+
+
+
+
+

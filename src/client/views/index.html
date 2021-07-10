@@ -1,84 +1,48 @@
-<!doctype html>
-<html lang="en">
+<meta charset="UTF-8">
+<title>Travel Application</title>
+<!-- bootstrap -->
 
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <title>Travel App!</title>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/style.scss">
 </head>
+ <body>
+<div id = "app">
+  <div class ="holder headline">
+      <h1 class="display-4">Travel Weather App</h1>
+  </div>
+  <div class ="holder zip">
+    <label for="zip">Destination</label>
+    <input type="text" id="zip" placeholder="Enter City of Destination">
+  </div>
+  <div class ="holder feel">
+      <div class="feel_box">
+          <label for="feelings">Arrival Date</label>
+      </div>
+      <div class="feel_box">
+          <input type="date" name="date" id="date" class="date" min="0" required>
+      </div>
+      <div class="feel_box">
+          <button class="btn btn-primary float-right" id="generate" type = "submit" > Get Forecast! </button>
+      </div>
+  </div>
+  </div>
+  </div>
+<footer>
+  <h2 class="text-center">Travel Weather App</h2>
+  <p class="text-center">&copy; NissiStudios</p><br>
+  <a href="https://github.com/nissichima" class="fa fa-github"></a>
+  <a href="https://www.linkedin.com/in/nissi-chima-a6503b212/" class="fa fa-linkedin"></a>
+</footer>
+<script src="app.js" type="text/javascript"></script>
+<script type="text/javascript" src="main.js"></script>
+<script type="module" src="../src/main.js"></script>
+<script type="module" src="script.js"></script>
+<script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
 
-<body>
-  <header>
-    <!-- Image and text -->
-    <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand" href="#">
-        <img src="" width="30" height="30" class="d-inline-block align-top" alt="">
-        Travel App
-      </a>
-    </nav>
-  </header>
-  <main>
-    <div class="container-fluid p-0">
-      <section class="hero">
-        <div class="caption jumbotron jumbotron-fluid">
-          <div class="container search">
-            <h1 class="display-1 text-center">Travel</h1>
-            <div class="row">
-             <input type="text" id="city" placeholder="City" aria-label="City" class="form-control col-md-3 mt-1">
-              <input type="date" id="date_start" aria-label="Date" class="form-control col-sm-6 col-md-3 mt-1">
-              <input type="date" id="date_end" aria-label="Date" class="form-control col-sm-6 col-md-3 mt-1">
-              <!-- <div class="input-group-append col-md-1"> -->
-                <button class="btn btn-secondary col-md-2 mt-1" type="button" id="button_search">Search</button>
-              <!-- </div> -->
-            </div>
-          </div>
-        </div>
-        <div class="modal fade" id="tripModal" tabindex="-1" role="dialog" aria-labelledby="tripModalTitle"
-          aria-hidden="true">
-          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3 class="modal-title trip_title" id="tripModalTitle"></h3>
-                <button class="trip_cancel close" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="container-fluid">
-                  <div class="media row">
-                    <img src="" class="images mr-3 col-12 col-lg-5" alt="Popular Images from Trip Location">
-                    <div class="media-body col-12 col-lg-7">
-                      <h4 class="mt-0">Trip to: <span class="media_heading"></span></h4>
-                      <h6 class="mt-0">Departure: <span class="media_heading"></span></h6>
-                      <h6 class="mt-0">Return: <span class="media_heading"></span></h6>
-                      <h6 class="mt-0">Duration: <span class="media_heading"></span></h6>
-                      <span class="trip_countdown"></span>
-                      <span class="trip_weather"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary trip_cancel">Close</button>
-                  <button type="button" class="btn btn-primary trip_save">Save</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- <section class="trips"></section> -->
-    </div>
-  </main>
-  <script>
-    // Check that service workers are supported
-    if ('serviceWorker' in navigator) {
-      // Use the window load event to keep the page load performant
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js');
-      });
-    }
-  </script>
+
+
 </body>
 </html>
