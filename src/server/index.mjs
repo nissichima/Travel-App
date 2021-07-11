@@ -14,11 +14,9 @@ const serverTimeOut = '60s';
 let projectData = {};
 
 dotenv.config();
-const api_key = process.env.API_KEY;
 
 //API VARIABLES
 const Geo_base = 'http://api.geonames.org/searchJSON'
-const restCount_base = 'https://restcountries.eu/rest/v2/alpha/'
 const WB_base16 = 'https://api.weatherbit.io/v2.0/forecast/daily'
 const WB_base = 'https://api.weatherbit.io/v2.0/current'
 const PB_base = 'https://pixabay.com/api/'
@@ -107,7 +105,7 @@ app.post('/api/postUserSelection', processUserInput);
     }
   
    // image fetching
-    const response8 = await fetch(`${PB_base}?key=${process.env.PB_KEY}&q=${name}`)
+    const response8 = await fetch(`${PB_base}?key=${process.env.PIXABAY_API_KEY}&q=${name}`)
     const response9 = await response8.json()
 
    // if city is found, display it. other wise display the country
