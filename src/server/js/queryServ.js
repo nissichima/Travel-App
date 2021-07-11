@@ -1,5 +1,6 @@
 //CHANGE CODE
 
+
 // Node fetch is required to query the external API via fetch()
 const fetch = require('node-fetch');
 
