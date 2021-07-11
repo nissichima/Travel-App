@@ -1,4 +1,4 @@
-//CHANGE CODE
+
 import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -41,10 +41,10 @@ app.get('/', function (req, res) {
     res.sendFile(path.resolve('dist/index.html'))
 });
 
-// The user input is processed and the APIs are queried.
+// Proccessing input and querying API'S
 const processUserInput = async (req, res) => {
   console.log(`daysUntilTrip: ${req.body.daysUntilTrip}`);
-  // Date from date picker is formatted
+  // Format date
   const dateFormatted = new Date(req.body.date).toISOString().slice(0, -14);
   projectData = {
     city: req.body.city,
@@ -95,7 +95,7 @@ app.post('/api/postUserSelection', processUserInput);
     // console.log(`daysAway = ${daysAway}`)
 
     // use city to fetch GeoName info
-    const response = await fetch(`${GeoN_baseURL}?q=${city}&maxRows=1&username=${process.env.GeoN_KEY}`)
+    const response = await fetch(`${Geo_base}?q=${city}&maxRows=1&username=${process.env.GEONAMES_USER}`)
     const response1 = await response.json()
     
     // console.log(response1)
