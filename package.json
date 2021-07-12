@@ -27,6 +27,8 @@
     "handlebars-loader": "^1.7.1",
     "html-webpack-plugin": "^5.3.2",
     "jest-fetch-mock": "^3.0.3",
+    "js-datepicker": "^5.18.0",
+    "weather-icons-sass": "^2.0.10",
     "webpack-cli": "^3.3.12"
   },
   "devDependencies": {

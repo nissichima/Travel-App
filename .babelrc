@@ -12,7 +12,9 @@
         {
             targets: {
                 esmodules: true,
-            }
+            },
+            "browsers": ['last 2 chrome versions'
+          ]
         }
     ]
 ]}
