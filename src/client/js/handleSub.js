@@ -7,6 +7,12 @@ import {
   updateUI,  showErrorMessage, removeErrorMessage,
 } from './indexUp';
 
+const queryLocalServer = (path) => {
+    const localhost = `http://localhost:${8081}`;
+    return new URL(path, localhost);
+  return null;
+};
+
 const getToday = () => new Date();
 
 const getDaysUntilTrip = (date) => {
@@ -16,15 +22,15 @@ const getDaysUntilTrip = (date) => {
 
 const getInput = async () => {
   const userInput = {
-    city: document.getElementById('city').value,
+    city: document.getElementById('zip').value,
     countryCode: selectedCountryCode,
-    date: document.getElementById('trip-date').value,
-    daysUntilTrip: getDaysUntilTrip(document.getElementById('trip-date').value),
+    date: document.getElementById('date').value,
+    daysUntilTrip: getDaysUntilTrip(document.getElementById('date').value),
   };
   return userInput;
 };
 
-// The user input is sent to the server. On the server side the APIs are queried.
+// input sent to server
 const postUserSelection = async (object = {}) => {
   const settings = {
     method: 'POST',
@@ -45,54 +51,11 @@ const postUserSelection = async (object = {}) => {
   }
 };
 
-const submitInfo = (event) => {
-  // If a result is already shown the view gets reset.
-  const forms = document.getElementsByClassName('needs-validation');
-  /*
-    The following function validates user input and carries out feedback if the input
-    is not valid. This function is adapted from the Bootstrap Starter code
-    (https://getbootstrap.com/docs/4.6/components/forms/#validation).
-  */
-  Array.prototype.filter.call(forms, (form) => {
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    if (form.checkValidity() === true) {
-      event.preventDefault();
-      // The spinner is shown to feedback the loading process.
-      removeErrorMessage();
-      showSpinner();
-      getInput()
-        .then((response) => postUserSelection(response))
-        .then(
-          // After getting a response from the server the data is processed.
-          (response) => {
-            if (!response.error) {
-              updateUI(response);
-            }
-            if (response.error) {
-              console.log(response);
-              removeSpinner();
-              showErrorMessage(response.error);
-            }
-          },
-        );
-    }
-    form.classList.add('was-validated');
-  });
-};
 
 const submitByKeypress = (event) => {
   if (event.key === 'Enter') {
     submitInfo(event);
   }
-};
-
-// The selected country is read.
-const inputCountry = () => {
-  selectedCountryCode = document.getElementById('country').value;
-  console.log(selectedCountryCode);
 };
 
 // When the page is loaded the content gets updated.
@@ -102,7 +65,7 @@ window.addEventListener('load', () => {
     the date input field. Via minDate: getToday() it is prevented for the
     user to select a date in the past.
   */
-  const tripDate = datepicker('#trip-date', {
+  const tripDate = datepicker('#date', {
     minDate: getToday(),
     dateSelected: getToday(),
     position: 'tl',
@@ -117,29 +80,7 @@ window.addEventListener('load', () => {
   // The overview tab is hidden.
   document.getElementById('nav-item-overview').classList.add('d-none');
 
-  // The home page image is set: a random city image provided via Pixabay.
-
-  const getHomePageImage = async () => {
-    const res = await fetch(queryLocalServer('/api/getHomePageImage'));
-    let image = {};
-    try {
-      image = await res.json();
-      return image;
-    } catch (error) {
-      console.error('the following error occured: ', error.message);
-      image.imageId = 'smart-vagabond-background-default';
-      return image;
-    }
-  };
-  getHomePageImage()
-    .then((result) => {
-      if (process.env.NODE_ENV === 'production') {
-        document.getElementById('hero').style.backgroundImage = `url("./cache/${result.imageId}.jpg")`;
-      }
-      if (process.env.NODE_ENV === 'development') {
-        document.getElementById('hero').style.backgroundImage = `url("./dist/cache/${result.imageId}.jpg")`;
-      }
-    });
+ 
 });
 
 export { inputCountry };

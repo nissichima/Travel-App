@@ -1,3 +1,46 @@
+@import "~bootstrap/scss/bootstrap";
+@import "~weather-icons-sass/sass/weather-icons-variables";
+@import "~weather-icons-sass/sass/weather-icons-core";
+@import "~weather-icons-sass/sass/weather-icons-classes";
+
+.accordion {
+  border-radius: $border-radius;
+}
+
+.collapsible-link::before {
+  content: "";
+  width: 14px;
+  height: 2px;
+  background: $gray-900;
+  position: absolute;
+  top: calc(50% - 1px);
+  right: 1rem;
+  display: block;
+  transition: all 0.3s;
+}
+
+.collapsible-link::after {
+  content: "";
+  width: 2px;
+  height: 14px;
+  background: $gray-900;
+  position: absolute;
+  top: calc(50% - 7px);
+  right: calc(1rem + 6px);
+  display: block;
+  transition: all 0.3s;
+}
+
+.collapsible-link[aria-expanded="true"]::after {
+  transform: rotate(90deg) translateX(-1px);
+  top: calc(50% - 6px);
+}
+
+.collapsible-link[aria-expanded="true"]::before {
+  transform: rotate(180deg);
+}
+
+
 button {
     width: 150px;
     height: 50px;

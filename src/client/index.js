@@ -4,7 +4,7 @@ import './styles/style.scss'
 import 'bootstrap';
 
 import {
-  showSpinner, removeSpinner, resetView,
+  resetView,
 } from './js/indexUp';
 
 
