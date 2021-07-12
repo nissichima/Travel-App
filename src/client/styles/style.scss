@@ -162,13 +162,15 @@ textarea {
     height: 80px;
     width: 120px;
     font-size: 20px;
+    color: #ebd834;
     border-radius: 12px;
-    background-color: yellow;
+    background-color: black;
     &:hover {
     cursor: pointer;
     transform: scale(1.1);
-    background-color: yellow;
-    border: 1px solid yellow;
+    background-color: #ebd834;
+    color: black;
+    border: 2px solid black;
   }
 
 
