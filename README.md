@@ -28,13 +28,10 @@
 
 ### Project Extensions
 
-- utilized [restcountries.eu](https://restcountries.eu/) to fetch additional info about the country
+- multiple days of forecast
 
 - if picture of city is not found on pixabay, fetch and show picture of country instead
 
-- utilize LocalStorage so that when the user closes the page, and then revisits the page, the info is still there
-
-- allow user to remove the trip by pressing the reset button
 
 ### Starting Instructions
 
