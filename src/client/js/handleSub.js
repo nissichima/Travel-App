@@ -1,6 +1,4 @@
 
-//CHANGE CODE
-
 import datepicker from 'js-datepicker';
 
 import {
@@ -52,12 +50,6 @@ const postUserSelection = async (object = {}) => {
 };
 
 
-const submitByKeypress = (event) => {
-  if (event.key === 'Enter') {
-    submitInfo(event);
-  }
-};
-
 // When the page is loaded the content gets updated.
 window.addEventListener('load', () => {
   /*
@@ -83,8 +75,5 @@ window.addEventListener('load', () => {
  
 });
 
-export { inputCountry };
-export { submitInfo };
-export { submitByKeypress };
 export { getDaysUntilTrip };
 export { postUserSelection };

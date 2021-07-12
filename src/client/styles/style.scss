@@ -1,17 +1,13 @@
-@import "~bootstrap/scss/bootstrap";
+/*@import "~bootstrap/scss/bootstrap";
 @import "~weather-icons-sass/sass/weather-icons-variables";
 @import "~weather-icons-sass/sass/weather-icons-core";
-@import "~weather-icons-sass/sass/weather-icons-classes";
-
-.accordion {
-  border-radius: $border-radius;
-}
+@import "~weather-icons-sass/sass/weather-icons-classes";*/
 
 .collapsible-link::before {
   content: "";
   width: 14px;
   height: 2px;
-  background: $gray-900;
+  background: gray;
   position: absolute;
   top: calc(50% - 1px);
   right: 1rem;
@@ -23,7 +19,7 @@
   content: "";
   width: 2px;
   height: 14px;
-  background: $gray-900;
+  background: gray;
   position: absolute;
   top: calc(50% - 7px);
   right: calc(1rem + 6px);
