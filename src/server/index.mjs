@@ -14,6 +14,7 @@ export default
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static('dist'));
 // API FOR GEONAMES
 const geoNamesUrl = 'http://api.geonames.org/searchJSON?q=';
 const geoNamesUrlArgs = `&maxRows=1&username=${process.env.GEONAMES_USERNAME}`; 

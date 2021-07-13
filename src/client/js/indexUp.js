@@ -41,12 +41,14 @@ async function handleSubmit(event) {
     resultID.style.display = 'none';
     
     // Selectors defined to obtain user input data
-    let location = document.getElementById('destination').value;
+    let location = document.getElementById('zip').value;
     let start = document.getElementById('date').value;
     // Variables to initiate date instances for calculations
     const today = new Date();
     const arrivalDate = new Date(start);
 
+    const travelTime = arrivalDate.getTime();
+    const daysInTravel = convertTimeUnits(travelTime);
     // Calculates days from today until trip
     const timeUntilTrip = arrivalDate.getTime() - today;
     const daysUntilTrip = convertTimeUnits(timeUntilTrip) + 1;
@@ -74,7 +76,7 @@ async function handleSubmit(event) {
       console.log('###############');
       console.log(trip);
       console.log('###############');
-      updateUI(trip)
+      updateUI(trip);
 
   }else{
     //alert('Please enter a valid trip duration!

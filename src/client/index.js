@@ -54,6 +54,7 @@ export {
 // "today," or the day they use this app, to 15 days from today. This is to 
 // work around the weatherbit 16 day, starting from the respective "today," forecast limit
 //might remove?
+/*
 (function () {
     const d = new Date();
     const dateArrival = document.getElementById('date');
@@ -81,4 +82,4 @@ export {
 
     dateDeparture.value = minDate;
     dateReturn.value = maxDate;
-})();
+})();*/
