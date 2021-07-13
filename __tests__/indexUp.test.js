@@ -4,12 +4,11 @@ const supertest = require('supertest');
 const request = supertest(app);
 
 // Example from URL above to check if this is working
-describe('Test the test Endpoint', () => {
-    it('Gets the test endpoint', async () => {
+describe('end test', () => {
+    it('get end', async () => {
         const res = await request.get('/test');
 
         expect(res.status).toEqual(200)
-        expect(res.body.message).toBe('done');
-        //done()
+        expect(res.body.message).toBe('yayaya');
     })
 })

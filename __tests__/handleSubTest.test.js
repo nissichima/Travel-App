@@ -1,7 +1,7 @@
 import { formatDate } from '../src/client/js/handleSub.js';
 
-describe('Test formatDate function', () => {
-    test('Check that formatDate returns a string', () => {
+describe('function test', () => {
+    test('string ye', () => {
         const day = 1;
         const month = 2;
         const year = 2021;
