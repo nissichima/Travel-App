@@ -1,4 +1,3 @@
-
 import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -9,131 +8,170 @@ import fs from 'fs';
 import timeout from 'connect-timeout';
 import response from 'express';
 
-//const serverTimeOut = '60s';
-
-dotenv.config();
-const api_key = process.env.API_KEY;
-
-//API VARIABLES
-const Geo_base = 'http://api.geonames.org/searchJSON'
-const restCount_base = 'https://restcountries.eu/rest/v2/alpha/'
-const WB_base16 = 'https://api.weatherbit.io/v2.0/forecast/daily'
-const WB_base = 'https://api.weatherbit.io/v2.0/current'
-const PB_base = 'https://pixabay.com/api/'
-
 const app = express();
+
+export default
 app.use(cors());
-app.use(bodyParser.urlencoded({ 
-    extended: false 
-}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+// API FOR GEONAMES
+const geoNamesUrl = 'http://api.geonames.org/searchJSON?q=';
+const geoNamesUrlArgs = `&maxRows=1&username=${process.env.GEONAMES_USERNAME}`; 
 
-//app.use(timeout(serverTimeOut));
+// API FOR PIXABAY
+const pixabayUrl = `https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=`; 
+const pixabayUrlArgs = '&image_type=photo&order=popular';
 
-const port = process.env.PORT || 8081;
+// API FOR WEATHERBIT
+const weatherBitUrl = 'https://api.weatherbit.io/v2.0/forecast/daily?'; 
+const weatherBitUrl1 = `&key=${process.env.WEATHERBIT_API_KEY}`;
+const weatherBitUrl2 = '&lang=en';
+
+
+// DECLARING THE PORT
+const port = 8081;
 const server = app.listen(port, () => {
+    const starter = new Date();
     console.log(`running on localhost: ${port}`);
 });
 
+// OBJECT TO STORE DATA
+let data = {};
 
-app.use(express.static('dist'));
-app.get('/', (req, res) => res.sendFile(path.resolve('dist/index.html')));
+//HELP FUNCTION
+const fixSpaces = (stringWithSpace) => {
+  let regex = new RegExp(' ', 'g')
+  let stringWithPlus = stringWithSpace.replace(regex, '+');
+  return stringWithPlus;
+}
 
-app.post('/destination', async (req, res) => {
-    const weatherKey = process.env.WEATHERBIT_API_KEY;
-    const geoKey = process.env.GEONAMES_USER;
-    const pixabayKey = process.env.PIXABAY_API_KEY; 
+//Added testing endpoint.
+app.get('/test', async (req, res) => {
+  res.json({message: 'YAY!'})
+})
 
-    const city = req.body.city;
-    let data = {};
+app.get('/', function (req, res) {
+    res.sendFile('dist/index.html')
+})
+
+app.post('/addTrip', (req, res) => {
+    console.log('Adding the trip...')
+    let newTrip = req.body;
+    let newEntry = {
+      //GET LOCATION OF TRIP
+      location: newTrip.Location,
+      //GET ARRIVAL DATE OF TRIP
+      arrivalDate: newTrip.Arrival,
+      //GET DAYS UNTIL TRIP
+      daysToTrip: newTrip.DaysToGo,
+    }
     
-    const geoBase = `http://api.geonames.org/searchJSON?q=${city}&maxRows=1&username=${geoKey}`;
+    data = newEntry;
+    res.send('tripAdded');
+})
 
-    await fetch(geoBase)
-    .then(response => response.json())
-    .then(response => {
-        const { lat, lng, toponymName, countryName } = response.geonames[0];
-        data = {
-            city: toponymName,
-            countryName,
-            lat,
-            lng
-        }
+
+app.get('/getGeonames', (req, res) => {
+  console.log('Adding geonames data...')
+  const url = `${geoNamesUrl}${fixSpaces(data.location)}${geoNamesUrlArgs}`;
+  console.log(url);
+    fetch(url)
+      .then(res => res.json())
+        .then(response =>{
+          try {
+            console.log('Data From GeoNames')
+            console.log(response);
+            data['long'] = response.geonames[0].lng;
+            data['lat'] = response.geonames[0].lat;
+            data['name'] =response.geonames[0].name; 
+            data['adminName'] = response.geonames[0].adminName1;
+            data['countryName'] = response.geonames[0].countryName;
+            data['code'] = response.geonames[0].countryCode;
+            data['population'] = response.geonames[0].population;
+            res.send(true);
+          } catch (e) {
+            console.log("Error: ", e);
+          }
     })
-    .catch(error => console.log('error', error));
-
-    const currentWeatherBase = `https://api.weatherbit.io/v2.0/current?lat=${data.lat}&lon=${data.lng}&key=${weatherKey}`;
-
-    await fetch(currentWeatherBase)
-    .then(response => response.json())
-    .then(response => {
-        data = {
-            ...data,
-            curentWeather: response.data[0]
-        }
+    .catch(error => {
+      res.send(JSON.stringify({error: error}));
     })
-    .catch(error => console.log('error', error));
+})
 
-    const forecastWeatherBase = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${data.lat}&lon=${data.lng}&key=${weatherKey}`;
+app.get('/getWeather', (req, res) => {
+  console.log('Adding weatherbit data...');
+  const url = `${weatherBitUrl}lat=${data.lat}&lon=${data.long}${weatherBitUrl1}${weatherBitUrl2}`;
+  console.log(url);
+    fetch(url)
+      .then(response => response.json())
+        .then(response =>{
+          let forecastDay = data.daysToTrip;
+          const data = response.data[forecastDay]
+          console.log(data)
 
-    await fetch(forecastWeatherBase)
-    .then(response => response.json())
-    .then(response => {
-        data = {
-            ...data,
-            forecastWeather: response.data
-        }
+          data.maxTemp = data.max_temp;
+          data.minTemp = data.min_temp;
+          data.humidity = data.rh;
+          data.precipProb = data.pop; 
+          data.weatherDesc = data.weather.description;
+          data.weatherIcon = data.weather.icon;
+
+          res.send(true)
     })
-    .catch(error => console.log('error', error));
-    
-    const pixabayQueryCity  = `&q=${data.city}&orientation=horizontal&image_type=photo`;
-    const pixabayQueryCountry  = `&q=${data.countryName}&orientation=horizontal&image_type=photo`;
-    let pixabayBase = `https://pixabay.com/api/?key=${pixabayKey}${pixabayQueryCity}`;
-    let imageURL = '';
-
-    await fetch(pixabayBase)
-    .then(response => response.json())
-    .then(response => {
-        imageURL = response.hits[0].webformatURL;
+    .catch(error => {
+      res.send(JSON.stringify({error: "An error occured"}));
     })
-    .catch(error => console.log('error', error));
+})
 
-    if(imageURL === '') {
-        let pixabayBase = `https://pixabay.com/api/?key=${pixabayKey}${pixabayQueryCountry}`;
-        await fetch(pixabayBase)
-        .then(response => response.json())
-        .then(response => {
-            imageURL = response.hits[0].webformatURL;
+app.get('/getCityImage', (req, res) => {
+  console.log('Adding pixabay city data...')
+  const url = `${pixabayUrl}${fixSpaces(data.name)}+${fixSpaces(data.countryName)}${pixabayUrlArgs}`;
+  console.log(url);
+    fetch(url)
+      .then(response => response.json())
+        .then(response =>{
+          const cityArray = [];
+          const result1 = response.hits[0].webformatURL;
+          const result2 = response.hits[1].webformatURL;
+          const result3 = response.hits[2].webformatURL;
+
+          cityArray.push(result1);
+          cityArray.push(result2);
+          cityArray.push(result3);
+          data.cityArray = cityArray
+          res.send(true);
         })
-        .catch(error => console.log('error', error));
-    }
+        .catch(error => {
+          res.send(JSON.stringify({error: "An error has occured"}));
+        })
+})
 
-    data = {
-        ...data,
-        imageURL
-    }
+app.get('/getCountryImage', (req, res) => {
+  console.log('Adding pixabay country data...')
+  const url = `${pixabayUrl}${fixSpaces(data.countryName)}${pixabayUrlArgs}`;
+  console.log(url);
+    fetch(url)
+      .then(response => response.json())
+        .then(response =>{
+          const countryArray = [];
+          const result1 = response.hits[0].webformatURL;
+          const result2 = response.hits[1].webformatURL;
+          const result3 = response.hits[2].webformatURL;
+          countryArray.push(result1);
+          countryArray.push(result2);
+          countryArray.push(result3);
+          data.countryArray = countryArray
+          res.send(true);
+        })
+        .catch(error => {
+          res.send(JSON.stringify({error: "An error has occured"}));
+        })
+})
 
+app.get('/getTrip', (req, res) => {
+    console.log(data);
     res.send(data);
-});
-
-app.get('/background', (req, res) => {
-    const key = process.env.PIXABAY_KEY;
-    const query = '&q=city&orientation=horizontal&image_type=photo';
-    const url = `https://pixabay.com/api/?key=${key}${query}`;
-    const options = { 
-        method: 'POST' 
-    }
-    fetch(url, options)
-    .then(response => response.json())
-    .then(data => {
-        const randomImage = Math.floor(Math.random() * 20);
-        const image = data.hits[randomImage];
-        if(image !== undefined || image !== '') {
-            res.send({url:image.largeImageURL});
-        }
-    })
-    .catch(error => console.log('error', error));
-});
+})
 
 
 

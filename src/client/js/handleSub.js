@@ -1,79 +1,33 @@
 
-import datepicker from 'js-datepicker';
+// Function to create a date string "yyyy-mm-dd"
+const formatDate = (day, month, year) => {
 
-import {
-  updateUI,  showErrorMessage, removeErrorMessage,
-} from './indexUp';
+    day = day.toString();
+    month = month.toString();
+    year = year.toString();
 
-const queryLocalServer = (path) => {
-    const localhost = `http://localhost:${8081}`;
-    return new URL(path, localhost);
-  return null;
-};
+    if(day.length === 1){
+        day = `0${day}`;
+    }
+    if(month.length === 1){
+        month = `0${month}`;
+    }
 
-const getToday = () => new Date();
+    return `${year}-${month}-${day}`
+}
 
-const getDaysUntilTrip = (date) => {
-  const tripDate = new Date(date).getTime();
-  return (Math.floor(((tripDate - getToday().getTime()) / (1000 * 60 * 60 * 24)) + 1));
-};
-
-const getInput = async () => {
-  const userInput = {
-    city: document.getElementById('zip').value,
-    countryCode: selectedCountryCode,
-    date: document.getElementById('date').value,
-    daysUntilTrip: getDaysUntilTrip(document.getElementById('date').value),
-  };
-  return userInput;
-};
-
-// input sent to server
-const postUserSelection = async (object = {}) => {
-  const settings = {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(object),
-  };
-  try {
-    const fetchResponse = await fetch(queryLocalServer('/api/postUserSelection'), settings);
-    const data = await fetchResponse.json();
-    console.log('data received');
-    return data;
-  } catch (error) {
-    console.error('the following error occured: ', error.message);
-    return error;
+// Converts time from miliseconds to days
+const convertTimeUnits = (timeInMilliseconds) => {
+    let timeInDays = timeInMilliseconds/(1000 * 60 * 60 * 24);
+    return Math.ceil(timeInDays);
   }
-};
+  
+// Splits the date (yyyy-mm-dd) from the time separated by "T"
+const splitDate = (dateAPI) => {
+    let newDate = dateAPI.split('T')
+    return newDate[0];
+}
 
-
-// When the page is loaded the content gets updated.
-window.addEventListener('load', () => {
-  /*
-    Datepicker is added. When the page is loaded the current date is set in
-    the date input field. Via minDate: getToday() it is prevented for the
-    user to select a date in the past.
-  */
-  const tripDate = datepicker('#date', {
-    minDate: getToday(),
-    dateSelected: getToday(),
-    position: 'tl',
-  });
-
-  // Heading is added.
-  document.getElementById('main-heading-contents').innerHTML = 'City Guides';
-
-  // Home link to logo is set.
-  document.getElementById('home-link').setAttribute('href', queryLocalServer('/'));
-
-  // The overview tab is hidden.
-  document.getElementById('nav-item-overview').classList.add('d-none');
-
- 
-});
-
-export { getDaysUntilTrip };
-export { postUserSelection };
+export {
+    formatDate, convertTimeUnits, splitDate
+}

@@ -164,13 +164,14 @@ textarea {
     font-size: 20px;
     color: #ebd834;
     border-radius: 12px;
+    border: 4px #ebd834;
     background-color: black;
     &:hover {
     cursor: pointer;
     transform: scale(1.1);
     background-color: #ebd834;
     color: black;
-    border: 2px solid black;
+    border: 4px solid black;
   }
 
 
