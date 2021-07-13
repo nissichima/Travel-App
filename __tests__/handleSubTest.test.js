@@ -1,12 +1,12 @@
-import { getDaysUntilTrip } from '../src/client/js/handleSub';
+import { formatDate } from '../src/client/js/handleSub.js';
 
-const moment = require('moment');
+describe('Test formatDate function', () => {
+    test('Check that formatDate returns a string', () => {
+        const day = 1;
+        const month = 2;
+        const year = 2021;
 
-moment().format();
-
-describe('Testing the response functionality for the calculation of days.', () => {
-  const inFiveDays = moment().add(5, 'days');
-  test('Testing a date that is five days in the future.', () => {
-    expect(getDaysUntilTrip(inFiveDays)).toBe(5);
-  });
+        expect(typeof(formatDate(day, month, year))).toEqual('string');
+        expect(formatDate(day, month, year)).toEqual('2021-02-01');
+    });
 });
