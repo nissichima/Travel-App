@@ -1,12 +1,7 @@
-import path from 'path';
-import express from 'express';
+import { express, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import fetch from 'node-fetch';
-import fs from 'fs';
-import timeout from 'connect-timeout';
-import response from 'express';
 
 const app = express();
 
@@ -32,18 +27,17 @@ const weatherBitUrl2 = '&lang=en';
 // DECLARING THE PORT
 const port = 8081;
 const server = app.listen(port, () => {
-    const starter = new Date();
     console.log(`running on localhost: ${port}`);
 });
 
 // OBJECT TO STORE DATA
-let data = {};
+let weatherData = {};
 
 //HELP FUNCTION
 const fixSpaces = (stringWithSpace) => {
   let regex = new RegExp(' ', 'g')
-  let stringWithPlus = stringWithSpace.replace(regex, '+');
-  return stringWithPlus;
+   
+  return stringWithSpace.replace(regex, '+');
 }
 
 //Added testing endpoint.
@@ -67,7 +61,7 @@ app.post('/addTrip', (req, res) => {
       daysToTrip: newTrip.DaysToGo,
     }
     
-    data = newEntry;
+    weatherData = newEntry;
     res.send('tripAdded');
 })
 
@@ -77,18 +71,18 @@ app.get('/getGeonames', (req, res) => {
   const url = `${geoNamesUrl}${fixSpaces(data.location)}${geoNamesUrlArgs}`;
   console.log(url);
     fetch(url)
-      .then(res => res.json())
-        .then(response =>{
+      .then(respo => res.json())
+        .then(resp =>{
           try {
             console.log('Data From GeoNames')
             console.log(response);
-            data['long'] = response.geonames[0].lng;
-            data['lat'] = response.geonames[0].lat;
-            data['name'] =response.geonames[0].name; 
-            data['adminName'] = response.geonames[0].adminName1;
-            data['countryName'] = response.geonames[0].countryName;
-            data['code'] = response.geonames[0].countryCode;
-            data['population'] = response.geonames[0].population;
+            data['long'] = resp.geonames[0].lng;
+            data['lat'] = resp.geonames[0].lat;
+            data['name'] =resp.geonames[0].name; 
+            data['adminName'] = resp.geonames[0].adminName1;
+            data['countryName'] = resp.geonames[0].countryName;
+            data['code'] = resp.geonames[0].countryCode;
+            data['population'] = resp.geonames[0].population;
             res.send(true);
           } catch (e) {
             console.log("Error: ", e);
@@ -101,21 +95,21 @@ app.get('/getGeonames', (req, res) => {
 
 app.get('/getWeather', (req, res) => {
   console.log('Adding weatherbit data...');
-  const url = `${weatherBitUrl}lat=${data.lat}&lon=${data.long}${weatherBitUrl1}${weatherBitUrl2}`;
+  const url = `${weatherBitUrl}lat=${weatherData.lat}&lon=${weatherData.long}${weatherBitUrl1}${weatherBitUrl2}`;
   console.log(url);
     fetch(url)
-      .then(response => response.json())
-        .then(response =>{
-          let forecastDay = data.daysToTrip;
-          const data = response.data[forecastDay]
-          console.log(data)
+      .then(resp => response.json())
+        .then(respo =>{
+          let forecastDay = weatherData.daysToTrip;
+          const forcastData = respo.data[forecastDay]
+          console.log(forcastData)
 
-          data.maxTemp = data.max_temp;
-          data.minTemp = data.min_temp;
-          data.humidity = data.rh;
-          data.precipProb = data.pop; 
-          data.weatherDesc = data.weather.description;
-          data.weatherIcon = data.weather.icon;
+          data.maxTemp = weatherData.max_temp;
+          data.minTemp = weatherData.min_temp;
+          data.humidity = weatherData.rh;
+          data.precipProb = weatherData.pop; 
+          data.weatherDesc = weatherData.weather.description;
+          data.weatherIcon = weatherData.weather.icon;
 
           res.send(true)
     })
@@ -126,20 +120,20 @@ app.get('/getWeather', (req, res) => {
 
 app.get('/getCityImage', (req, res) => {
   console.log('Adding pixabay city data...')
-  const url = `${pixabayUrl}${fixSpaces(data.name)}+${fixSpaces(data.countryName)}${pixabayUrlArgs}`;
+  const url = `${pixabayUrl}${fixSpaces(weatherData.name)}+${fixSpaces(weatherData.countryName)}${pixabayUrlArgs}`;
   console.log(url);
     fetch(url)
-      .then(response => response.json())
-        .then(response =>{
+      .then(resp => response.json())
+        .then(respo =>{
           const cityArray = [];
-          const result1 = response.hits[0].webformatURL;
-          const result2 = response.hits[1].webformatURL;
-          const result3 = response.hits[2].webformatURL;
+          const result1 = respo.hits[0].webformatURL;
+          const result2 = respo.hits[1].webformatURL;
+          const result3 = respo.hits[2].webformatURL;
 
           cityArray.push(result1);
           cityArray.push(result2);
           cityArray.push(result3);
-          data.cityArray = cityArray
+          weatherData.cityArray = cityArray
           res.send(true);
         })
         .catch(error => {
@@ -149,19 +143,19 @@ app.get('/getCityImage', (req, res) => {
 
 app.get('/getCountryImage', (req, res) => {
   console.log('Adding pixabay country data...')
-  const url = `${pixabayUrl}${fixSpaces(data.countryName)}${pixabayUrlArgs}`;
+  const url = `${pixabayUrl}${fixSpaces(weatherData.countryName)}${pixabayUrlArgs}`;
   console.log(url);
     fetch(url)
-      .then(response => response.json())
-        .then(response =>{
+      .then(resp => response.json())
+        .then(respo =>{
           const countryArray = [];
-          const result1 = response.hits[0].webformatURL;
-          const result2 = response.hits[1].webformatURL;
-          const result3 = response.hits[2].webformatURL;
+          const result1 = respo.hits[0].webformatURL;
+          const result2 = respo.hits[1].webformatURL;
+          const result3 = respo.hits[2].webformatURL;
           countryArray.push(result1);
           countryArray.push(result2);
           countryArray.push(result3);
-          data.countryArray = countryArray
+          weatherData.countryArray = countryArray
           res.send(true);
         })
         .catch(error => {
@@ -170,8 +164,8 @@ app.get('/getCountryImage', (req, res) => {
 })
 
 app.get('/getTrip', (req, res) => {
-    console.log(data);
-    res.send(data);
+    console.log(weatherData);
+    res.send(weatherData);
 })
 
 
