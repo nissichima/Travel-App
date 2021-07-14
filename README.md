@@ -21,9 +21,7 @@
 
 ### Project Extensions
 
-- weather icons
-
-- if picture of city is not found on pixabay, fetch and show picture of country instead
+- Incorporated weather icons into forecasts
 
 
 ### Starting Instructions
@@ -40,7 +38,5 @@
 
 - run npm run start
 
-- go to [http://localhost:8081/](http://localhost:8081/)
-
 ## Screenshot of App
-<img src = '.../src/client/images/travel.png'/>
+<img src = "./src/client/images/img1.png"/>
