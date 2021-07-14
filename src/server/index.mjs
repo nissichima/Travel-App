@@ -1,7 +1,8 @@
-import { express, Response } from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import fetch from 'node-fetch';
+import Response from 'express';
 
 const app = express();
 
@@ -75,7 +76,7 @@ app.get('/getGeonames', (req, res) => {
         .then(resp =>{
           try {
             console.log('Data From GeoNames')
-            console.log(response);
+            console.log(resp);
             data['long'] = resp.geonames[0].lng;
             data['lat'] = resp.geonames[0].lat;
             data['name'] =resp.geonames[0].name; 
@@ -98,7 +99,7 @@ app.get('/getWeather', (req, res) => {
   const url = `${weatherBitUrl}lat=${weatherData.lat}&lon=${weatherData.long}${weatherBitUrl1}${weatherBitUrl2}`;
   console.log(url);
     fetch(url)
-      .then(resp => response.json())
+      .then(resp => res.json())
         .then(respo =>{
           let forecastDay = weatherData.daysToTrip;
           const forcastData = respo.data[forecastDay]
@@ -123,7 +124,7 @@ app.get('/getCityImage', (req, res) => {
   const url = `${pixabayUrl}${fixSpaces(weatherData.name)}+${fixSpaces(weatherData.countryName)}${pixabayUrlArgs}`;
   console.log(url);
     fetch(url)
-      .then(resp => response.json())
+      .then(resp => res.json())
         .then(respo =>{
           const cityArray = [];
           const result1 = respo.hits[0].webformatURL;
@@ -146,7 +147,7 @@ app.get('/getCountryImage', (req, res) => {
   const url = `${pixabayUrl}${fixSpaces(weatherData.countryName)}${pixabayUrlArgs}`;
   console.log(url);
     fetch(url)
-      .then(resp => response.json())
+      .then(resp => res.json())
         .then(respo =>{
           const countryArray = [];
           const result1 = respo.hits[0].webformatURL;

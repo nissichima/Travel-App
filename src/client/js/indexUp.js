@@ -54,6 +54,9 @@ async function handleSubmit(event) {
     const daysUntilTrip = convertTimeUnits(timeUntilTrip) + 1;
     console.log(daysUntilTrip);
 
+
+
+
     if(daysInTravel > 0)
     {
       await postTrip('http://localhost:8081/addTrip', { 
@@ -89,7 +92,7 @@ async function handleSubmit(event) {
 
 }
 
-async function postTrip(url, trip){
+  async function postTrip(url, trip){
     const response = await fetch(url, {
       method: 'POST',
       mode: 'cors',
@@ -99,6 +102,7 @@ async function postTrip(url, trip){
       },
       body: JSON.stringify(trip)
     });
+    console.log(response.status);
 }
 
 const fetchLocal = async(url) => {
