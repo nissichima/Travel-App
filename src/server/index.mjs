@@ -69,7 +69,7 @@ app.post('/addTrip', (req, res) => {
 
 app.get('/getGeonames', (req, res) => {
   console.log('Adding geonames data...')
-  const url = `${geoNamesUrl}${fixSpaces(data.location)}${geoNamesUrlArgs}`;
+  const url = `${geoNamesUrl}${fixSpaces(weatherData.location)}${geoNamesUrlArgs}`;
   console.log(url);
     fetch(url)
       .then(respo => res.json())
@@ -77,13 +77,13 @@ app.get('/getGeonames', (req, res) => {
           try {
             console.log('Data From GeoNames')
             console.log(resp);
-            data['long'] = resp.geonames[0].lng;
-            data['lat'] = resp.geonames[0].lat;
-            data['name'] =resp.geonames[0].name; 
-            data['adminName'] = resp.geonames[0].adminName1;
-            data['countryName'] = resp.geonames[0].countryName;
-            data['code'] = resp.geonames[0].countryCode;
-            data['population'] = resp.geonames[0].population;
+            weatherData['long'] = resp.geonames[0].lng;
+            weatherData['lat'] = resp.geonames[0].lat;
+            weatherData['name'] =resp.geonames[0].name; 
+            weatherData['adminName'] = resp.geonames[0].adminName1;
+            weatherData['countryName'] = resp.geonames[0].countryName;
+            weatherData['code'] = resp.geonames[0].countryCode;
+            weatherData['population'] = resp.geonames[0].population;
             res.send(true);
           } catch (e) {
             console.log("Error: ", e);
