@@ -34,7 +34,11 @@
 
 - obtain API keys for Weatherbit, Pixabay and GeoNames with your own accounts and place them in .env file matching api keys in server.js
 
-- run npm run go
+- run npm run build- dev
+
+- run npm run build-prod
+
+- run npm run start
 
 - go to [http://localhost:8081/](http://localhost:8081/)
 

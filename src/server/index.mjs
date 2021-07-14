@@ -14,7 +14,7 @@ app.use(express.static('dist'));
 // API FOR GEONAMES
 const geoNamesUrl = 'http://api.geonames.org/searchJSON?q=';
 const geoNamesUrlArgs = `&maxRows=1&username=${process.env.GEONAMES_USER}`; 
-
+console.log(process.env.GEONAMES_USER)
 // API FOR PIXABAY
 const pixabayUrl = `https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=`; 
 const pixabayUrlArgs = '&image_type=photo&order=popular';
@@ -26,7 +26,7 @@ const weatherBitUrl2 = '&lang=en';
 
 
 // DECLARING THE PORT
-const port = 8081;
+const port = process.env.PORT || 8081;
 const server = app.listen(port, () => {
     console.log(`running on localhost: ${port}`);
 });
@@ -102,15 +102,15 @@ app.get('/getWeather', (req, res) => {
       .then(response => response.json())
         .then(response =>{
           let forecastDay = weatherData.daysToTrip;
-          const forcastData = response.data[forecastDay]
-          console.log(forcastData)
+          const data = response.data[forecastDay]
+          console.log(data)
 
-          data.maxTemp = weatherData.max_temp;
-          data.minTemp = weatherData.min_temp;
-          data.humidity = weatherData.rh;
-          data.precipProb = weatherData.pop; 
-          data.weatherDesc = weatherData.weather.description;
-          data.weatherIcon = weatherData.weather.icon;
+          weatherData.maxTemp = data.max_temp;
+          weatherData.minTemp = data.min_temp;
+          weatherData.humidity = data.rh;
+          weatherData.precipProb = data.pop; 
+          weatherData.weatherDesc = data.weather.description
+          weatherData.weatherIcon = data.weather.icon
 
           res.send(true)
     })
