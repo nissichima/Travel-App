@@ -2,7 +2,7 @@
 
 //WEATHER ICONS!!
 import {    convertTimeUnits, splitDate, formatLanguages } from './handleSub';
-
+import image2 from './c03d.png'
 // Trip Planner - User Entry Point
 const resultID = document.getElementById('result-data');
 
@@ -141,8 +141,10 @@ const updateUI = async (results) => {
   humidity.innerHTML = results.humidity;
   precipProb.innerHTML = results.precipProb;
   weatherDesc.innerHTML = results.weatherDesc;
-  let weatherIconCall = `./img/${results.weatherIcon}.png`;
+  let weatherIconCall = `https://www.weatherbit.io/static/img/icons/${results.weatherIcon}.png`;
+  console.log(weatherIconCall)
   weatherIconRef.setAttribute('src', weatherIconCall);
+  console.log(weatherIconRef)
 
   //Update Images
   if(results.cityArray === undefined || results.cityArray.length < 3){
