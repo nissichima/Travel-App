@@ -18,17 +18,10 @@
 
 - install and use service workers
 
-### Weatherbit fetching options
-
-- if user enters a date less than 7 days away, show immediate forecast
-
-- if user enters a date less than 16 days away, show forecast for that date
-
-- if user enters a date 16 days away or more, show forecast as unavailable
 
 ### Project Extensions
 
-- multiple days of forecast
+- weather icons
 
 - if picture of city is not found on pixabay, fetch and show picture of country instead
 
