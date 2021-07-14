@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import fetch from 'node-fetch';
-import Response from 'express';
+import {response} from 'express';
 
 const app = express();
 
@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(express.static('dist'));
 // API FOR GEONAMES
 const geoNamesUrl = 'http://api.geonames.org/searchJSON?q=';
-const geoNamesUrlArgs = `&maxRows=1&username=${process.env.GEONAMES_USERNAME}`; 
+const geoNamesUrlArgs = `&maxRows=1&username=${process.env.GEONAMES_USER}`; 
 
 // API FOR PIXABAY
 const pixabayUrl = `https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=`; 
@@ -72,18 +72,18 @@ app.get('/getGeonames', (req, res) => {
   const url = `${geoNamesUrl}${fixSpaces(weatherData.location)}${geoNamesUrlArgs}`;
   console.log(url);
     fetch(url)
-      .then(respo => res.json())
-        .then(resp =>{
+      .then(response => response.json())
+        .then(response =>{
           try {
             console.log('Data From GeoNames')
-            console.log(resp);
-            weatherData['long'] = resp.geonames[0].lng;
-            weatherData['lat'] = resp.geonames[0].lat;
-            weatherData['name'] =resp.geonames[0].name; 
-            weatherData['adminName'] = resp.geonames[0].adminName1;
-            weatherData['countryName'] = resp.geonames[0].countryName;
-            weatherData['code'] = resp.geonames[0].countryCode;
-            weatherData['population'] = resp.geonames[0].population;
+            console.log(response);
+            weatherData['long'] = response.geonames[0].lng;
+            weatherData['lat'] = response.geonames[0].lat;
+            weatherData['name'] =response.geonames[0].name; 
+            weatherData['adminName'] = response.geonames[0].adminName1;
+            weatherData['countryName'] = response.geonames[0].countryName;
+            weatherData['code'] = response.geonames[0].countryCode;
+            weatherData['population'] = response.geonames[0].population;
             res.send(true);
           } catch (e) {
             console.log("Error: ", e);
@@ -99,10 +99,10 @@ app.get('/getWeather', (req, res) => {
   const url = `${weatherBitUrl}lat=${weatherData.lat}&lon=${weatherData.long}${weatherBitUrl1}${weatherBitUrl2}`;
   console.log(url);
     fetch(url)
-      .then(resp => res.json())
-        .then(respo =>{
+      .then(response => response.json())
+        .then(response =>{
           let forecastDay = weatherData.daysToTrip;
-          const forcastData = respo.data[forecastDay]
+          const forcastData = response.data[forecastDay]
           console.log(forcastData)
 
           data.maxTemp = weatherData.max_temp;
@@ -124,12 +124,12 @@ app.get('/getCityImage', (req, res) => {
   const url = `${pixabayUrl}${fixSpaces(weatherData.name)}+${fixSpaces(weatherData.countryName)}${pixabayUrlArgs}`;
   console.log(url);
     fetch(url)
-      .then(resp => res.json())
-        .then(respo =>{
+      .then(response => response.json())
+        .then(response =>{
           const cityArray = [];
-          const result1 = respo.hits[0].webformatURL;
-          const result2 = respo.hits[1].webformatURL;
-          const result3 = respo.hits[2].webformatURL;
+          const result1 = response.hits[0].webformatURL;
+          const result2 = response.hits[1].webformatURL;
+          const result3 = response.hits[2].webformatURL;
 
           cityArray.push(result1);
           cityArray.push(result2);
@@ -147,12 +147,12 @@ app.get('/getCountryImage', (req, res) => {
   const url = `${pixabayUrl}${fixSpaces(weatherData.countryName)}${pixabayUrlArgs}`;
   console.log(url);
     fetch(url)
-      .then(resp => res.json())
-        .then(respo =>{
+      .then(response => response.json())
+        .then(response =>{
           const countryArray = [];
-          const result1 = respo.hits[0].webformatURL;
-          const result2 = respo.hits[1].webformatURL;
-          const result3 = respo.hits[2].webformatURL;
+          const result1 = response.hits[0].webformatURL;
+          const result2 = response.hits[1].webformatURL;
+          const result3 = response.hits[2].webformatURL;
           countryArray.push(result1);
           countryArray.push(result2);
           countryArray.push(result3);
