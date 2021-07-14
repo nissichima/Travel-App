@@ -3,6 +3,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import fetch from 'node-fetch';
 import {response} from 'express';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 

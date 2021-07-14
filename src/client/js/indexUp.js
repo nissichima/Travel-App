@@ -86,7 +86,7 @@ async function handleSubmit(event) {
     msgInfo.style.display = 'none';
     msgInfo.innerHTML = "";
     errorInfo.style.display = 'block';
-    errorInfo.innerHTML ="Entries must start today or in the future and end at least one day after.";
+    errorInfo.innerHTML ="Entries must start today or in the future.";
 
   }
 
@@ -141,7 +141,7 @@ const updateUI = async (results) => {
   humidity.innerHTML = results.humidity;
   precipProb.innerHTML = results.precipProb;
   weatherDesc.innerHTML = results.weatherDesc;
-  let weatherIconCall = `${results.weatherIcon}.png`;
+  let weatherIconCall = `./img/${results.weatherIcon}.png`;
   weatherIconRef.setAttribute('src', weatherIconCall);
 
   //Update Images
