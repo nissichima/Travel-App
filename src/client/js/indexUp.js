@@ -2,7 +2,6 @@
 
 //WEATHER ICONS!!
 import {    convertTimeUnits, splitDate, formatLanguages } from './handleSub';
-import image2 from './c03d.png'
 // Trip Planner - User Entry Point
 const resultID = document.getElementById('result-data');
 
