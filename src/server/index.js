@@ -25,17 +25,19 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('dist'));
+
+//showing keys for submission purpose only
 // API FOR GEONAMES
 const geoNamesUrl = 'http://api.geonames.org/searchJSON?q=';
-const geoNamesUrlArgs = `&maxRows=1&username=${process.env.GEONAMES_USER}`; 
+const geoNamesUrlArgs = `&maxRows=1&username=nissichima`; 
 console.log(process.env.GEONAMES_USER)
 // API FOR PIXABAY
-const pixabayUrl = `https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=`; 
+const pixabayUrl = `https://pixabay.com/api/?key=22322600-9e065bdb9f8e40d627e3b9e8d&q=`; 
 const pixabayUrlArgs = '&image_type=photo&order=popular';
 
 // API FOR WEATHERBIT
 const weatherBitUrl = 'https://api.weatherbit.io/v2.0/forecast/daily?'; 
-const weatherBitUrl1 = `&key=${process.env.WEATHERBIT_API_KEY}`;
+const weatherBitUrl1 = `&key=6663294128a3483fb0a519f8fcda6f61`;
 const weatherBitUrl2 = '&lang=en';
 
 
