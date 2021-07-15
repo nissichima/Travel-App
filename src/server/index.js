@@ -1,15 +1,26 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import fetch from 'node-fetch';
-import {response} from 'express';
-import dotenv from 'dotenv';
+//import express from 'express';
+const express = require('express');
+
+//import bodyParser from 'body-parser';
+const bodyParser = require('body-parser')
+
+//import cors from 'cors';
+const cors = require('cors');
+
+//import fetch from 'node-fetch';
+const fetch = require('node-fetch');
+
+//import {response} from 'express';
+const { response } = require('express')
+
+//import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 
 dotenv.config();
 
 const app = express();
 
-export default
+module.exports = {app}
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
