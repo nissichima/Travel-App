@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 
 module.exports = {
-  entry: "./src/public/index.js",
+  entry: "./src/client/index.js",
 
   module: {
     rules: [
@@ -50,7 +50,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/public/views/index.handlebars",
+      template: "./src/client/views/index.handlebars",
       title: "Travel App",
     }),
     new Dotenv({ path: "./config/.env", systemvars: true }),
