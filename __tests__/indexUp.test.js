@@ -1,8 +1,11 @@
+const app = require("../src/server/index");
+const supertest = require("supertest");
+const request = supertest(app);
 
-import { handleSubmit } from "../src/client/js/indexUp";
-
-describe('Testing the existence of function "handleSubmit()"' , () => {
-    test('Should return true', async () => {
-        expect(handleSubmit).toBeDefined();
-    });
+describe("get the endpoints right", () => {
+  it("returns an html file", async (done) => {
+    const response = await request.get("/");
+    expect(response.status).toBe(200);
+    done();
+  });
 });

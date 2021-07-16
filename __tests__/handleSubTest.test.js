@@ -8,5 +8,6 @@ describe('function test', () => {
 
         expect(typeof(formatDate(day, month, year))).toEqual('string');
         expect(formatDate(day, month, year)).toEqual('2021-02-01');
+        
     });
 });

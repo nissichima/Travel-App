@@ -1,3 +1,4 @@
+
 //import express from 'express';
 const express = require('express');
 
@@ -20,7 +21,7 @@ dotenv.config();
 
 const app = express();
 
-module.exports = {app}
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -42,11 +43,11 @@ const weatherBitUrl2 = '&lang=en';
 
 
 // DECLARING THE PORT
-const port = process.env.PORT || 8081;
+const port = 8081;
 const server = app.listen(port, () => {
     console.log(`running on localhost: ${port}`);
 });
-
+module.exports = app
 // OBJECT TO STORE DATA
 let weatherData = {};
 
